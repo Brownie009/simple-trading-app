@@ -1,0 +1,21 @@
+<div class="sessionMessageDiv" style="display: none;"><%= sessionMessage %></div>
+<div class="sessionMeterDiv" style="display: none;"><%= sessionMeter %></div>
+<div class="message">
+    <span>Click on seller to view their products and transaction history!</span>
+</div>
+<div class="mainContent">
+  <div style="margin-left: 21%; padding-top:1%; padding-bottom:1%;">
+    <a href="/">Back To Home</a>
+  </div>
+  <h3 style="text-align: center; margin-bottom: 0.5%;">ALL SELLERS</h3>
+  <div id="sellerList">
+    <% for(let seller of allSellers) { %>
+      <% if(seller.productsSelling.length > 0) { %>
+         <div class="listElement">
+           <li><a href='/sellers/<%= seller._id %>' style="font-size: 20px"><%= seller.accountName %></a></li>
+         </div>
+      <% } %>          
+    <% } %>
+
+  </div>
+</div>

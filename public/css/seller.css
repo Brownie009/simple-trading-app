@@ -1,0 +1,113 @@
+/* This file aims to have the css associated for a seller's products table and it's transaction table */
+/* This file is also used on loggedin home page because of the similiar display for the loggedin user on home page */
+table {
+    width: 96%;
+    margin-left: 2%;
+    margin-right: 2%;
+    table-layout: fixed;
+    border-left: 0.8px solid black;
+    border-right: 0.8px solid black;
+    border-bottom: 0.8px solid black;
+}
+tr {
+    width: 100%;
+    display: flex;
+}
+th {
+  white-space: nowrap; 
+  overflow: hidden;
+}
+td {
+  white-space: nowrap; 
+  overflow: hidden;
+  line-height: 30px;
+  vertical-align: middle;
+}
+/* For seller products table */
+.prodNameCell { 
+    width: 45%;
+    border-top: 1px solid black;  
+    text-align: center;
+  }
+.unitPriceCell { 
+    width: 20%;
+    border-top: 1px solid black;
+    border-left: 1px solid black;  
+    text-align: center;
+}
+.qtyOnSaleCell {
+    width: 20%;
+    border-top: 1px solid black;
+    border-left: 1px solid black;  
+    text-align: center;
+}
+.deleteProductCell {
+    width: 15%;
+    border-top: 1px solid black;  
+    border-left: 1px solid black;
+    text-align: center;
+}
+/* For seller transactions table */
+.prodNCell {
+  width: 20%;
+  border-top: 1px solid black;
+  text-align: center;
+}
+.buyCell {
+  width: 20%;
+  border-top: 1px solid black;
+  border-left: 1px solid black;  
+  text-align: center;
+}
+.saleCell {
+  width: 20%;
+  border-top: 1px solid black;
+  border-left: 1px solid black;  
+  text-align: center;
+}
+.dateOfTCell {
+  width: 20%;
+  border-top: 1px solid black;
+  border-left: 1px solid black;  
+  text-align: center;
+}
+.accBalanceCell {
+  width: 20%;
+  border-top: 1px solid black;
+  border-left: 1px solid black;  
+  text-align: center;
+}
+
+.noProducts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 96%;
+  height: 11.5vh;
+  margin-left: 2%;
+  margin-right: 2%;
+  background-color: rgb(247, 247, 247);
+  border: 1px solid black;
+}
+.noProducts p {
+  font-size: 20px;
+  white-space: nowrap; 
+  overflow: hidden;
+}
+.noTransactions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 96%;
+  height: 11.5vh;
+  margin-left: 2%;
+  margin-right: 2%;
+  text-align: center;
+  background-color: rgb(247, 247, 247);
+  border: 1px solid black;
+}
+.noTransactions p {
+  font-size: 20px;
+  white-space: nowrap; 
+  overflow: hidden;
+}

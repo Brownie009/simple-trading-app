@@ -1,0 +1,46 @@
+<div class="sessionMessageDiv" style="display: none;"><%= sessionMessage %></div>
+<div class="sessionMeterDiv" style="display: none;"><%= sessionMeter %></div>
+<div class="message">
+    <span>Must be logged in to make transactions! Login or signup above!</span>
+</div>
+<!-- Below are hidden elements used to provide information to the 'products.js' file for setting href links in the .sellerCell's anchor tags  -->
+<% for(let seller of allSellers) { %>
+    <p class="hiddenSellerName" style="display: none;"><%=seller.accountName%></p>
+    <p class="hiddenSellerId" style="display: none;"><%=seller._id%></p>    
+<% } %>
+
+<div class="mainContent">
+  <div style="display: flex; padding-top:1%; padding-bottom:1%">
+    <a href="/" style="margin-left: 21%;">Back To Home</a>
+  </div>
+  <h3 style="text-align: center; margin-bottom: 0.5%;">ALL PRODUCTS</h3>
+  <table>
+    <tr>
+      <th class="prodNameCell">Product Name</th>
+      <th class="sellerCell">Seller</th>
+      <th class="unitPriceCell">Price/Unit</th>
+      <th class="qtyCell">Quantity</th>
+      <th class="totalPriceCell">Total Price</th>
+      <th class="buyCell"></th>
+    </tr>
+    <% for(let product of allProducts) { %>
+      <% if(product.qtyOnSale > 0) { %>
+        <tr>
+          <td class="prodNameCell" id="<%= product.name %>prodNameCell"><%= product.name %></td>
+          <td class="sellerCell" id="<%= product.name %>sellerCell"><a href=""><%= product.seller %></a></td>
+          <td class="unitPriceCell">$<span id="<%= product.name %>unitPriceSpan"><%= (product.unitPrice).toFixed(2) %></span></td>
+          <td class="qtyCell" id="<%= product.name %>qtyCell"><span class="minus" id="<%= product.name %>minus">-</span><span class="qtyValue" id="<%= product.name %>qtyValue">1</span><span class="plus" id="<%= product.name %>plus">+</span></td>
+          <td class="totalPriceCell">$<span id="<%= product.name %>totalPriceSpan"><%= (product.unitPrice).toFixed(2) %></span></td>
+          <td class="buyCell" id="<%= product.name %>buyCell">
+            <form action="/buy" method="post" class="buyForm" id="<%= product.name %>buyForm">
+              <input type="text" name="prodName" value="<%= product.name %>" style="display: none;">
+              <input type="text" name="unitPrice" value="<%= product.unitPrice %>" style="display: none;">
+              <input type="text" id="<%= product.name %>inputQty" name="qty" value="1" style="display: none;">
+              <button class="btn btn-light buyBtn" id="<%= product.name %>buyBtn">BUY!</button>
+            </form>
+          </td>
+        </tr>
+      <% } %>
+    <% } %> 
+  </table>
+</div>

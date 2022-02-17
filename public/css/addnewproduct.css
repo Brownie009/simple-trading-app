@@ -1,0 +1,25 @@
+#ANPformDiv {
+    width: 70%;
+    margin: auto;
+}
+
+#ANPprodName {
+    border: 1px solid black;
+}   
+.input-group-text {
+    border: 1px solid black;
+
+}
+#ANPunitPrice {
+    border: 1px solid black;
+}   
+#ANPqty{
+    border: 1px solid black;
+}    
+#ANPbutton{
+    width: 100%;
+    border: 1px solid black;
+  }
+#ANPbutton:hover {
+    background-color: lightgray;
+}

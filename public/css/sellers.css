@@ -1,0 +1,12 @@
+#sellerList {
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 2%;
+    margin-right: 2%;
+    border: 1px solid black;
+    min-height: 50vh;
+    background-color: rgb(247, 247, 247);
+}
+.listElement {
+    padding: 2%;
+}

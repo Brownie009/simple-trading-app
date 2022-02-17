@@ -1,0 +1,133 @@
+       <div class="container-fluid">
+       <div class="sessionMessageDiv" style="display: none;"><%= sessionMessage %></div>
+       <div class="sessionMeterDiv" style="display: none;"><%= sessionMeter %></div>
+       <div class="message">
+            <span style="width: 70%; font-size: 16px;">Below you can see the products of <%= requestedSeller.accountName %> currently on sale and their transaction history. Feel free to buy <%= requestedSeller.accountName  %>'s products!</span>
+            <span style="width: 30%;">Logged in as <b>'<%= loggedInSeller.accountName %>'</b></span>
+        </div>
+        <div class="mainContent">
+          <div style="display: flex; justify-content: space-around; padding-top:1%; padding-bottom:1%">
+            <a href="/products">Back to Home</a>
+            <a href="/sellers">Back to Sellers</a>
+          </div>
+          <!-- Seller's products -->
+          <h3 style="text-align: center; margin-top: 1%; margin-bottom: 1%;text-transform: uppercase;"><%= requestedSeller.accountName %>'s Products</h3>
+      <% if(requestedSeller.productsSelling.length > 0) { %> 
+          <table>
+          <tr>
+            <th class="prodNameCell">Product Name</th>
+            <th class="qtyOnSaleCell">Quantity in Stock</th>
+            <th class="unitPriceCell">Price/Unit</th>
+            <th class="qtyCell">Quantity</th>
+            <th class="totalPriceCell">Total Price</th>
+            <th class="buyCell"></th>
+          </tr>
+        <% for(let product of requestedSeller.productsSelling) { %>
+          <% if(product.qtyOnSale > 0) { %>
+          <tr>
+            <td class="prodNameCell" id="<%= product.name %>prodNameCell"><%= product.name %></td>
+            <td class="qtyOnSaleCell" id="<%= product.name %>qtyOnSaleCell"><%= product.qtyOnSale %></td>
+            <td class="unitPriceCell">$<span id="<%= product.name %>unitPriceSpan"><%= (product.unitPrice).toFixed(2) %></span></td>
+            <td class="qtyCell" id="<%= product.name %>qtyCell"><span class="minus" id="<%= product.name %>minus">-</span><span class="qtyValue" id="<%= product.name %>qtyValue">1</span><span class="plus" id="<%= product.name %>plus">+</span></td>
+            <td class="totalPriceCell">$<span id="<%= product.name %>totalPriceSpan"><%= (product.unitPrice).toFixed(2) %></span></td>
+            <td class="buyCell" id="<%= product.name %>buyCell">
+              <form action="/buy" method="post" class="buyForm" id="<%= product.name %>buyForm">
+                <input type="text" name="prodName" value="<%= product.name %>" style="display: none;">
+                <input type="text" name="unitPrice" value="<%= product.unitPrice %>" style="display: none;">
+                <input type="text" id="<%= product.name %>inputQty" name="qty" value="1" style="display: none;">
+                <button class="btn btn-light buyBtn" id="<%= product.name %>buyBtn">BUY!</button>
+              </form>
+            </td>
+          </tr>
+          <% } %>
+        <% } %> 
+          </table> 
+      <% } else { %>
+          <div class="noProducts">
+            <p><%= requestedSeller.accountName %> has no products!</p>
+          </div>
+      <% } %>
+          <div style="display: flex; justify-content: center; padding-top:2%; padding-bottom:2%">
+            <a href="/transactions">View All Transactions</a>
+          </div>
+          <!-- Seller's Transactions -->
+          <h3 style="text-align: center; margin-bottom: 0.5%;"><%= (requestedSeller.accountName).toUpperCase() %>'S TRANSACTIONS</h3>
+          <% if(requestedSeller.transactions.length > 0) { %>
+          <table>
+            <tr>
+              <th class="prodNCell">Product Name</th>
+              <th class="buyCell">Buys</th>
+              <th class="saleCell">Sales</th>
+              <th class="accBalanceCell">Account Balance</th>
+              <th class="dateOfTCell">Date</th>
+            </tr>
+            <% for(let i = requestedSeller.transactions.length-1; i >= 0; i--) { %> 
+              <tr class="transactionRow">
+                <td class="prodNCell"><%= requestedSeller.transactions[i].productName %></td>
+                <% if(requestedSeller.transactions[i].buyer === requestedSeller.accountName) { %>
+                <td class="buyCell"><%= requestedSeller.transactions[i].qtyBought %> x $<%= (requestedSeller.transactions[i].pricePerUnit).toFixed(2) %></td>
+                <td class ="saleCell"></td>
+                <% } else { %>
+                <td class="buyCell"></td>
+                <td class ="saleCell"><%= requestedSeller.transactions[i].qtyBought %> x $<%= (requestedSeller.transactions[i].pricePerUnit).toFixed(2) %></td>
+                <% } %>  
+                <td class="accBalanceCell"></td>
+                <td class="dateOfTCell"><%= requestedSeller.transactions[i].timeOfTransaction.toLocaleString() %></td>
+              </tr>
+            <% } %> 
+          </table>
+          <% } else { %>
+            <div class="noTransactions">
+              <p><%= requestedSeller.accountName %>  has made no purchases yet and no one has bought any of their products thus far!</p>
+            </div>
+          <% } %>
+        </div>
+    </div>
+   
+  </div>
+  <script>
+    //Remove seconds from transaction date strings
+    const transactionDateCells = document.getElementsByClassName('dateOfTCell');
+    for(let i = transactionDateCells.length-1; i > 0; i--) {
+      let amOrPm = transactionDateCells[i].innerText.slice(-2);
+      let mainString = transactionDateCells[i].innerText.slice(0, -6);
+      let newDateString = mainString + amOrPm;
+      transactionDateCells[i].innerText = newDateString;
+    }
+
+    //Fill in the state of the account balance after each transaction. 
+    //Note: Account balance doesn't change if you buy your own products, quantity just goes down.
+    const transactionRows = document.getElementsByClassName('transactionRow');
+    const hiddenAccBalanceDiv = document.getElementById('hiddenAccBalance');
+    let accountBalance = 10000;
+    for(let i = transactionRows.length-1; i >= 0; i--) {
+      let productText = transactionRows[i].children[0].innerText;
+      let yourProductsCells = document.getElementsByClassName('prodNameCell');
+      let buyText = transactionRows[i].children[1].innerText;
+      let buyQty = buyText.slice(0, (buyText.indexOf("$") - 3));
+      let buyUnitPrice = buyText.slice(buyText.indexOf("$") + 1);      
+
+      let sellText = transactionRows[i].children[2].innerText;
+      let sellQty = sellText.slice(0, (sellText.indexOf("$") - 3));
+      let sellUnitPrice = sellText.slice(sellText.indexOf("$") + 1); 
+      let accBalCell = transactionRows[i].children[3];
+      let buyerSameAsSeller = false;
+      for(let cell of yourProductsCells) {
+        if((cell.innerText === productText) && (sellText == "")) {
+          buyerSameAsSeller = true;
+          break;
+        }
+      }
+      if(buyerSameAsSeller) {
+        accBalCell.innerText = `$${accountBalance.toFixed(2)}`;
+      } else {
+        if(buyText) {
+          accountBalance = accountBalance - parseFloat(buyQty)*parseFloat(buyUnitPrice);
+          accBalCell.innerText = `$${accountBalance.toFixed(2)}`;
+        } else if(sellText) {
+          accountBalance = accountBalance + parseFloat(sellQty)*parseFloat(sellUnitPrice);
+          accBalCell.innerText = `$${accountBalance.toFixed(2)}`;
+        }
+      }
+    }
+</script>

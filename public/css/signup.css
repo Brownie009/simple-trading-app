@@ -1,0 +1,18 @@
+#signUpFormDiv {
+    width: 70%;
+    margin: auto;
+}
+#signUpFormAccountName {
+    border: 1px solid black;
+    box-shadow: black;
+}   
+#signUpFormUsername {
+    border: 1px solid black;
+}
+#signUpFormPassword {
+    border: 1px solid black;
+}
+#signUpFormButton {
+  width: 100%;
+  border: 1px solid black;
+}

@@ -1,0 +1,84 @@
+
+table {
+    width: 96%;
+    table-layout: fixed;
+    margin-left: 2%;
+    margin-right: 2%;
+    border-left: 0.8px solid black;
+    border-right: 0.8px solid black; 
+    border-bottom: 0.8px solid black;
+}
+tr {
+    width: 100%;
+    display: flex;
+}
+th {
+  white-space: nowrap; 
+  overflow: hidden;
+}
+td {
+  white-space: nowrap; 
+  overflow: hidden;
+  line-height: 30px;
+  vertical-align: middle;
+}
+
+.prodNameCell { 
+  width: 35%;
+  border-top: 1px solid black;  
+  text-align: center;
+}
+
+
+.sellerCell {
+    width: 25%;
+    border-left: 1px solid black;
+    border-top: 1px solid black; 
+    text-align: center;
+}
+.unitPriceCell {
+    width: 10%;
+    border-left: 1px solid black;
+    border-top: 1px solid black; 
+    text-align: center;
+}
+.qtyCell {
+    width: 8%;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    text-align: center; 
+    display: flex;
+    justify-content: center;
+}
+.minus {
+  width: 35%;
+  background-color: rgb(235, 235, 235);
+}
+.qtyValue {
+  width: 30%;
+}
+.plus {
+  width: 35%;
+  background-color: rgb(235, 235, 235);
+}
+.totalPriceCell {
+    width: 10%;
+    border-left: 1px solid black;
+    border-top: 1px solid black; 
+    text-align: center;
+}
+.buyCell {
+    width: 12%;
+    border-left: 1px solid black;
+    border-top: 1px solid black; 
+}
+.buyBtn {
+    width: 100%;
+    border: 1px solid black;
+}
+.qtyOnSaleCell {
+  width: 25%;
+  border-left: 1px solid black;
+  border-top: 1px solid black; 
+  text-align: center;
+}

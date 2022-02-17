@@ -1,0 +1,124 @@
+<div class="container-fluid">
+  <div class="sessionMessageDiv" style="display: none;"><%= sessionMessage %></div>
+  <div class="sessionMeterDiv" style="display: none;"><%= sessionMeter %></div>
+  <div class="message">
+    <span style="width: 70%; font-size: 16px;">Click on '+ Add New Product' to add new product for sale or click on the products tab to buy existing products in the imaginary marketplace. Below you can see the products you're currently selling and your transaction history.</span>
+    <span style="width: 30%;">Logged in as <b>'<%= loggedInSeller.accountName %>'</b></span>
+  </div>
+  <div id="hiddenAccBalance" style="display: none;"><%= loggedInSeller.accountBalance %></div>
+  <div class="mainContent">
+    <div style="display: flex; justify-content: space-around; padding-top:1%; padding-bottom:1%">
+      <a href="/products">View All Products</a>
+      <a href="/sellers">View All Sellers</a>
+    </div>
+    <h3 style="text-align: center;">YOUR PRODUCTS</h3>
+    <% if(loggedInSeller.productsSelling.length > 0) { %> 
+    <table>
+      <tr>
+        <th class="prodNameCell">Product Name</th>
+        <th class="unitPriceCell">Price/Unit</th>
+        <th class="qtyOnSaleCell">Quantity in Stock</th>
+        <th class="deleteProductCell"></th>
+      </tr>
+      <% for(let product of loggedInSeller.productsSelling) { %>
+        <% if(product.qtyOnSale > 0) { %>
+      <tr>
+        <td class="prodNameCell" id="<%= product.name %>prodNameCell"><%= product.name %></td>
+        <td class="unitPriceCell" id="<%= product.name %>unitPriceCell">$<%= (product.unitPrice).toFixed(2) %></td>
+        <td class="qtyOnSaleCell" id="<%= product.name %>qtyOnSaleCell"><%= product.qtyOnSale %></td>
+        <td class="deleteProductCell" id="<%= product.name %>deleteProductCell">
+          <form action="/deleteproduct" method="post">
+            <input type="text" name="prodName" value = "<%= product.name %>" style="display: none;">
+            <button class="btn btn-light" style="width: 100%; font-size: 13px">REMOVE PRODUCT</button>
+          </form>
+        </td>
+      </tr>
+        <% } %>
+      <% } %> 
+    </table> 
+    <% } else { %>
+    <div class="noProducts">
+      <p>No products have been added yet! Click 'Add New Product' above!</p>
+    </div>
+    <% } %>
+    <div style="display: flex; justify-content: center; padding-top:2%; padding-bottom:2%">
+      <a href="/transactions">View All Transactions</a>
+    </div>
+    <h3 style="text-align: center; margin-bottom: 0.5%;">YOUR TRANSACTIONS</h3>
+    <% if(loggedInSeller.transactions.length > 0) { %> 
+    <table>
+      <tr>
+        <th class="prodNCell">Product Name</th>
+        <th class="buyCell">Buys</th>
+        <th class="saleCell">Sales</th>
+        <th class="accBalanceCell">Account Balance</th>
+        <th class="dateOfTCell">Date</th>
+      </tr>
+      <% for(let i = loggedInSeller.transactions.length-1; i >= 0; i--) { %> 
+        <tr class="transactionRow">
+          <td class="prodNCell"><%= loggedInSeller.transactions[i].productName %></td>
+          <% if(loggedInSeller.transactions[i].buyer === loggedInSeller.accountName) { %>
+          <td class="buyCell"><%= loggedInSeller.transactions[i].qtyBought %> x $<%= (loggedInSeller.transactions[i].pricePerUnit).toFixed(2) %></td>
+          <td class ="saleCell"></td>
+          <% } else { %>
+          <td class="buyCell"></td>
+          <td class ="saleCell"><%= loggedInSeller.transactions[i].qtyBought %> x $<%= (loggedInSeller.transactions[i].pricePerUnit).toFixed(2) %></td>
+          <% } %>  
+          <td class="accBalanceCell"></td>
+          <td class="dateOfTCell"><%= loggedInSeller.transactions[i].timeOfTransaction.toLocaleString() %></td>
+        </tr>
+      <% } %> 
+     </table>
+     <% } else { %>
+      <div class="noTransactions">
+        <p>You have made no purchases yet and no one has bought any of your products thus far!</p>
+      </div>
+     <% } %>
+  </div>
+  </div>
+  <script>
+    //Remove seconds from transaction date strings
+    const transactionDateCells = document.getElementsByClassName('dateOfTCell');
+    for(let i = transactionDateCells.length-1; i > 0; i--) {
+      let amOrPm = transactionDateCells[i].innerText.slice(-2);
+      let mainString = transactionDateCells[i].innerText.slice(0, -6);
+      let newDateString = mainString + amOrPm;
+      transactionDateCells[i].innerText = newDateString;
+    }
+
+    //Fill in the state of the account balance after each transaction. 
+    //Note: Account balance doesn't change if you buy your own products, quantity just goes down.
+    const transactionRows = document.getElementsByClassName('transactionRow');
+    const hiddenAccBalanceDiv = document.getElementById('hiddenAccBalance');
+    let accountBalance = 10000;
+    for(let i = transactionRows.length-1; i >= 0; i--) {
+      let productText = transactionRows[i].children[0].innerText;
+      let yourProductsCells = document.getElementsByClassName('prodNameCell');
+      let buyText = transactionRows[i].children[1].innerText;
+      let buyQty = buyText.slice(0, (buyText.indexOf("$") - 3));
+      let buyUnitPrice = buyText.slice(buyText.indexOf("$") + 1);      
+
+      let sellText = transactionRows[i].children[2].innerText;
+      let sellQty = sellText.slice(0, (sellText.indexOf("$") - 3));
+      let sellUnitPrice = sellText.slice(sellText.indexOf("$") + 1); 
+      let accBalCell = transactionRows[i].children[3];
+      let buyerSameAsSeller = false;
+      for(let cell of yourProductsCells) {
+        if((cell.innerText === productText) && (sellText == "")) {
+          buyerSameAsSeller = true;
+          break;
+        }
+      }
+      if(buyerSameAsSeller) {
+        accBalCell.innerText = `$${accountBalance.toFixed(2)}`;
+      } else {
+        if(buyText) {
+          accountBalance = accountBalance - parseFloat(buyQty)*parseFloat(buyUnitPrice);
+          accBalCell.innerText = `$${accountBalance.toFixed(2)}`;
+        } else if(sellText) {
+          accountBalance = accountBalance + parseFloat(sellQty)*parseFloat(sellUnitPrice);
+          accBalCell.innerText = `$${accountBalance.toFixed(2)}`;
+        }
+      }
+    }
+</script>

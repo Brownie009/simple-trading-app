@@ -1,0 +1,38 @@
+<div class="container-fluid">
+<div class="sessionMessageDiv" style="display: none;"><%= sessionMessage %></div>
+<div class="sessionMeterDiv" style="display: none;"><%= sessionMeter %></div>
+<div class="message">
+    <span>To view just your own transactions, go to home page!</span>
+    <span>Logged in as <b>'<%= loggedInSeller.accountName %>'</b></span>
+</div>
+<div class="mainContent">
+    <div style="display: flex; padding-top:1%; padding-bottom:1%">
+        <a href="/" style="margin-left: 21%;">Back To Home</a>
+    </div>
+    <h3 style="text-align: center; margin-bottom: 0.5%;">ALL TRANSACTIONS</h3>
+    <table>
+        <tr>
+            <th class="transactionCell">Transaction</th>
+            <th class="dateCell">Date</th>
+        </tr>
+        <% for(let i = allTransactions.length-1; i >= 0; i--) { %>
+            <tr>
+                <td class="transactionCell"><%= allTransactions[i].buyer %> buys <%= allTransactions[i].qtyBought %> unit<%= allTransactions[i].qtyBought > 1 ? "s" : "" %> of 
+                <%= allTransactions[i].seller %>'s <%= allTransactions[i].productName %></td>
+                <td class="dateCell"><%= allTransactions[i].timeOfTransaction.toLocaleString() %></td>
+            </tr>     
+        <% } %> 
+
+    </table>
+    <script>
+        //Remove seconds from transaction date strings
+        const dateCells = document.getElementsByClassName('dateCell');
+        for(let i = dateCells.length-1; i > 0; i--) {
+          let amOrPm = dateCells[i].innerText.slice(-2);
+          let mainString = dateCells[i].innerText.slice(0, -6);
+          let newDateString = mainString + amOrPm;
+          dateCells[i].innerText = newDateString;
+        }
+    </script>
+</div>
+</div>
