@@ -286,6 +286,7 @@ app.post('/deleteproduct', async (req, res) => {
   req.session.meter = 1;
   return res.redirect('back');
 });
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Listening on port ${port}!`);
 });
