@@ -11,7 +11,7 @@
             <a href="/sellers">Back to Sellers</a>
           </div>
           <!-- Seller's products -->
-          <h3 style="text-align: center; margin-top: 1%; margin-bottom: 0.5%;text-transform: uppercase;"><%= requestedSeller.accountName %>'s Products</h3>
+          <h3 style="text-align: center; margin-top: 1%; margin-bottom: 0.5%;text-transform: uppercase;"><%= requestedSeller.accountName %><%= requestedSeller.accountName.slice(-1) === "s" ? "'" : "'s" %> Products</h3>
       <% if(requestedSeller.productsSelling.length > 0) { %>
           <table>
           <tr>
@@ -51,7 +51,7 @@
             <a href="/transactions">View All Transactions</a>
           </div>
           <!-- Seller's Transactions -->
-          <h3 style="text-align: center; margin-bottom: 0.5%;"><%= (requestedSeller.accountName).toUpperCase() %>'S TRANSACTIONS</h3>
+          <h3 style="text-align: center; margin-bottom: 0.5%; text-transform: uppercase;"><%= requestedSeller.accountName %><%= requestedSeller.accountName.slice(-1) === "s" ? "'" : "'s" %> Transactions</h3>
           <% if(requestedSeller.transactions.length > 0) { %>
           <table>
             <tr>
