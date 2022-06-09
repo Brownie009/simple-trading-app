@@ -11,7 +11,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.use(express.urlencoded({extended: true}));
 app.use(session({ secret: 'notagoodsecret' }));
 const { Seller, Product, Transaction } = require('./schemas');
-mongoose.connect('mongodb+srv://m001-student:m001-mongodb-basics@sandbox.j6glj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect('*MongoDB URI (Private)*', { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("MONGO CONNECTION OPEN!");
   })
